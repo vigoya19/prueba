@@ -18,7 +18,6 @@ class Categoria
 
    /**
     * @ORM\OneToMany(targetEntity="App\Entity\Producto", mappedBy="categoria")
-
     */
     private $producto;
     /**
@@ -37,11 +36,11 @@ class Categoria
      * @ORM\Column(type="boolean")
      */
     private $activo;
-
-    public function __construct()
-    {
-     $this->producto = new ArrayCollection();
-    }
+  
+    //  public function __construct()
+    // {
+    //  $this->producto = new ArrayCollection();
+    // }
 
     public function getId(): ?int
     {

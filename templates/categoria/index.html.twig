@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categoria index{% endblock %}
+
+{% block body %}
+    <h1>Categoria index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Codigo</th>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Activo</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for categorium in categorias %}
+            <tr>
+                <td>{{ categorium.id }}</td>
+                <td>{{ categorium.codigo }}</td>
+                <td>{{ categorium.nombre }}</td>
+                <td>{{ categorium.descripcion }}</td>
+                <td>{{ categorium.activo ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('categoria_show', {'id': categorium.id}) }}">show</a>
+                    <a href="{{ path('categoria_edit', {'id': categorium.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('categoria_new') }}">Create new</a>
+{% endblock %}
