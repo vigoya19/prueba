@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CategoriaRepository")
@@ -22,18 +23,22 @@ class Categoria
     private $producto;
     /**
      * @ORM\Column(type="string")
+     * @Assert\NotBlank()     
      */
     private $codigo;
      /**
      * @ORM\Column(type="string")
+     * @Assert\NotBlank()  
      */
     private $nombre;
     /**
      * @ORM\Column(type="string")
+     * @Assert\NotBlank()  
      */
     private $descripcion;
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\NotBlank()  
      */
     private $activo;
   

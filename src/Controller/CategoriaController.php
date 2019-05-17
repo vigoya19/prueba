@@ -42,22 +42,29 @@ class CategoriaController extends Controller
     /**
      * @Route("/new", name="categoria_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, validate $validate): Response
     { 
          $data = $request->getContent();
-         $categoria = $this->get('jms_serializer')->
-         deserialize($data,'App\Entity\Categoria', 'json');
-    //    $errors = $validate->validateRequest($categoria);
+      
+         if(!$this->isJson($data)){
+             return new JsonResponse(['msg'=> 'No es un Json valido'], Response::HTTP_BAD_REQUEST);
+            }
+      
+         $categoria = $this->get('jms_serializer')->deserialize($data,'App\Entity\Categoria', 'json');
+         $errors = $validate->validateRequest($categoria);
        
-    //    if(!empty($errors)){
-    //        return new JsonResponse(
-    //            ['msg'=>'Error al Guardar',
-    //              'error'=>$errors],
-    //              Response::HTTP_BAD_REQUEST);
-           
-    //    }
-         var_dump($categoria);
-         exit();
+        if(!empty($errors)){
+            return new JsonResponse(
+                ['msg'=>'Error al Guardar',
+                  'error'=>$errors],
+                 Response::HTTP_BAD_REQUEST);
+ 
+        }
+             $em = $this->getDoctrine()->getManager();
+             $em->persist($categoria);
+             $em->flush();
+             var_dump($categoria);
+             exit();
         // $categorium = new Categoria();
         // $form = $this->createForm(CategoriaType::class, $categorium);
         // $form->handleRequest($request);
@@ -121,4 +128,9 @@ class CategoriaController extends Controller
 
         return $this->redirectToRoute('categoria_index');
     }
+
+    function isJson($string) {
+        json_decode($string);
+        return (json_last_error() == JSON_ERROR_NONE);
+       }
 }
