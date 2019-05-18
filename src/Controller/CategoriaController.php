@@ -20,13 +20,6 @@ class CategoriaController extends Controller
     /**
      * @Route("/", name="categoria_index", methods={"GET"})
      */
-//     public function getArticles(Request $request): Response
-// {
-//     $em = $this->getDoctrine()->getManager();
-//     $categoria = $em->getRepository(Categoria::class)->findAll();
-
-//     return new Response($this->json($categoria), Response::HTTP_OK);
-// }
     public function index(CategoriaRepository $categoriaRepository): Response
     {
         $categorias = $categoriaRepository->findAll(); // consulto todas las categorias
@@ -37,7 +30,7 @@ class CategoriaController extends Controller
        $data = $this->get('jms_serializer')->serialize($categorias, 'json'); // de lo contrario retorno mi array de objetos
        return new JsonResponse(json_decode($data), Response::HTTP_ACCEPTED);
         }
-    }
+       }
 
     /**
      * @Route("/new", name="categoria_new", methods={"GET","POST"})
@@ -65,72 +58,69 @@ class CategoriaController extends Controller
              $em->flush();
              var_dump($categoria);
              exit();
-        // $categorium = new Categoria();
-        // $form = $this->createForm(CategoriaType::class, $categorium);
-        // $form->handleRequest($request);
+       }
 
-        // if ($form->isSubmitted() && $form->isValid()) {
-        //     $entityManager = $this->getDoctrine()->getManager();
-        //     $entityManager->persist($categorium);
-        //     $entityManager->flush();
+    public function show($id): Response
+    {
 
-        //     return $this->redirectToRoute('categoria_index');
-        // }
-
-        // return $this->render('categoria/new.html.twig', [
-        //     'categorium' => $categorium,
-        //     'form' => $form->createView(),
-        // ]);
+        $em = $this->getDoctrine()->getManager();
+        $categoria = $em->getRepository(Categoria::class)->find($id);
+            
+        $data = $this->get('jms_serializer')->serialize($categoria, 'json'); // de lo contrario retorno mi array de objetos
+        return new JsonResponse(json_decode($data), Response::HTTP_ACCEPTED);
     }
 
     /**
-     * @Route("/{id}", name="categoria_show", methods={"GET"})
+     * @Route("/{id}/edit", name="categoria_edit", methods={"GET","PUT"})
      */
-    public function show(Categoria $categorium): Response
+    public function edit($id,Request $request): Response
     {
-        return $this->render('categoria/show.html.twig', [
-            'categorium' => $categorium,
-        ]);
-    }
+        //  $cat = new Categoria;
+        $data = $request->getContent();//Obtengo mi data
+        $data = $this->get('jms_serializer')->deserialize($data,'App\Entity\Categoria', 'json'); //Deserializo mi data para que php lo pueda entender como array
+        $em = $this->getDoctrine()->getManager(); 
+        $categoria = $em->getRepository(Categoria::class)->find($id); //Busco mi categoria 
 
-    /**
-     * @Route("/{id}/edit", name="categoria_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Categoria $categorium): Response
-    {
-        $form = $this->createForm(CategoriaType::class, $categorium);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('categoria_index', [
-                'id' => $categorium->getId(),
-            ]);
+        if(isset($categoria)){ //Si mi categoria trae resultados
+            
+            $categoria->setNombre($data->getNombre());//le seteo sus respectivos campos
+            $categoria->setCodigo($data->getCodigo());
+            $categoria->setDescripcion($data->getDescripcion());
+            $categoria->setActivo($data->getActivo());
+             $em->flush();
         }
-
-        return $this->render('categoria/edit.html.twig', [
-            'categorium' => $categorium,
-            'form' => $form->createView(),
-        ]);
+        
+        $updateCategoria = $this->get('jms_serializer')->serialize($categoria, 'json'); // de lo contrario retorno mi array de objetos
+        // return new JsonResponse(array('nombre'=>$data->getNombre(),'categoriaArray'=>$categoria), Response::HTTP_ACCEPTED);
+           return new JsonResponse(json_decode($updateCategoria), Response::HTTP_ACCEPTED);// return new JsonResponse($data->nombre);
     }
-
-    /**
+     /**
      * @Route("/{id}", name="categoria_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Categoria $categorium): Response
+    // ue es request? La clase Request representa la petición HTTP 
+    // siguiendo la filosofía de orientación a objetos. Con ella, tienes toda 
+    // la información a tu alcance:
+    public function delete($id, Request $request): Response 
     {
-        if ($this->isCsrfTokenValid('delete'.$categorium->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($categorium);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('categoria_index');
+         $em = $this->getDoctrine()->getManager(); 
+         $categoria = $em->getRepository(Categoria::class)->find($id); //Busco mi categoria 
+           
+    if(isset($categoria)){
+        $em->remove($categoria);
+        $em->flush();
+             return new JsonResponse(array('msg'=>'Eliminado','Categoria Eliminada' => $this->json($categoria) ), Response::HTTP_ACCEPTED);
+                }else{
+            return new JsonResponse(array('msg'=>'Error','Categoria No Eliminada' => $this->json($categoria) ), Response::HTTP_ACCEPTED);
+                    
+         }
     }
 
     function isJson($string) {
         json_decode($string);
         return (json_last_error() == JSON_ERROR_NONE);
        }
+
+
+
+
 }
