@@ -4,6 +4,11 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation as JMS;
+USE Doctrine\Common\Collections\ArrayCollection;
+
+
+
 
 
 /**
@@ -17,8 +22,6 @@ class Producto
      * @ORM\Column(type="integer")
      */
     private $id;
-
-
     /**
      * @ORM\Column(type="integer", length=45)
      */
@@ -39,25 +42,22 @@ class Producto
      */
     private $marca;
 
- 
 
      /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Categoria", inversedBy="producto")
-     * @ORM\JoinColumn(name="categoria", referencedColumnName="id")
-          */
+    * @ORM\Column(type="integer", length=45)
+    */
     private $categoria;
 
      /**
      * @ORM\Column(type="float")
-     * 
      */
     private $precio;
 
     
-    public function __construct()
-    {
-        $this->categoria = new ArrayCollection();
-    }
+    // public function __construct()
+    // {
+    //     $this->categoria = new ArrayCollection();
+    // }
 
     public function getId(): ?int
     {
@@ -184,23 +184,12 @@ class Producto
         return $this;
     }
 
-    /**
-     * Get the value of id_categoria
-     */ 
-    public function getId_categoria()
-    {
-        return $this->id_categoria;
-    }
 
-    /**
-     * Set the value of id_categoria
-     *
-     * @return  self
-     */ 
-    public function setId_categoria($id_categoria)
-    {
-        $this->id_categoria = $id_categoria;
+ 
 
-        return $this;
-    }
+ 
+
+
+ 
+
 }

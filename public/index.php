@@ -1,5 +1,19 @@
 <?php
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+header("Allow: GET, POST, OPTIONS, PUT, DELETE");
+header('content-type: application/json; charset=utf-8');
+$method = $_SERVER['REQUEST_METHOD'];
+ if($method == "OPTIONS") {
+     die();
+ }
 
+
+// response.setHeader("Access-Control-Allow-Origin", "*");
+// response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE, PATCH");
+// response.setHeader("Access-Control-Max-Age", "3600");
+// response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 use App\Kernel;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;

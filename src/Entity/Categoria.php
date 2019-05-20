@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+USE Doctrine\Common\Collections\ArrayCollection;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CategoriaRepository")
@@ -17,10 +19,7 @@ class Categoria
      */
     private $id;
 
-   /**
-    * @ORM\OneToMany(targetEntity="App\Entity\Producto", mappedBy="categoria")
-    */
-    private $producto;
+ 
     /**
      * @ORM\Column(type="string")
      * @Assert\NotBlank()     
