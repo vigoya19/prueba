@@ -73,7 +73,7 @@ class CategoriaController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($categoria);
             $em->flush();
-          return new JsonResponse(['msg'=>'insercion exitosa','status'=>'fail']);
+            return new JsonResponse(['msg'=>'Insercion Exitosa', 'status'=>'succes', 'data'=>$data], Response::HTTP_ACCEPTED);
             exit();
         }
        }

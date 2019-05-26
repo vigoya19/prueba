@@ -29,27 +29,32 @@ class Producto
 
     /**
      * @ORM\Column(type="string", length=45)
+     * @Assert\NotBlank() 
      */
     private $nombre;
 
     /**
      * @ORM\Column(type="string", length=45)
+     * @Assert\NotBlank() 
      */
     private $descripcion;
 
      /**
      * @ORM\Column(type="string", length=45)
+     * @Assert\NotBlank() 
      */
     private $marca;
 
 
      /**
     * @ORM\Column(type="integer", length=45)
+    *@Assert\NotBlank() 
     */
     private $categoria;
 
      /**
      * @ORM\Column(type="float")
+     * @Assert\NotBlank() 
      */
     private $precio;
 
